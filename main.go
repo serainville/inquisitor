@@ -1,7 +1,7 @@
 package main
 
 import (
-	"inquisitor/cmd"
+	"github.com/serainville/inquisitor/cmd"
 )
 
 func main() {
