@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"inquisitor/constants"
+	"github.com/serainville/inquisitor/constants"
 	"github.com/spf13/cobra"
 )
 
