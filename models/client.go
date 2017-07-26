@@ -10,3 +10,7 @@ type Client struct {
 	OS				string	`json:"os"`
 	ClientVersion	string	`json:"clientversion"`
 }
+
+func (m *Client) postClient() error {
+	return errors.New("Not implemeneted")
+}
