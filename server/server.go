@@ -6,7 +6,13 @@ import (
 	"io"
 	"log"
 	"os"
+	"encoding/json"
+	"time"
+
+	//"github.com/nytimes/gziphandler"
+
 	"github.com/serainville/inquisitor/variables"
+	"github.com/serainville/inquisitor/models"
 )
 
 type Config struct {
@@ -25,20 +31,21 @@ type Database struct {
 }
 
 func Init(
-	bindIp string,
+	bindIP string,
 	bindPort string,
 	TLSCertFile string,
 	TLSKeyFile string,
 	UseTLS bool) *Config {
 
-	return &Config{ip: bindIp, port: bindPort, TLSCertFile: TLSCertFile, TLSKeyFile: TLSKeyFile, UseTLS: UseTLS}
+	return &Config{ip: bindIP, port: bindPort, TLSCertFile: TLSCertFile, TLSKeyFile: TLSKeyFile, UseTLS: UseTLS}
 
 }
 
 func StartServer(c *Config) bool {
 
 	http.HandleFunc("/", serveRoot)
-	http.HandleFunc("/publish", servePublish)
+	http.HandleFunc("/api/v1/metrics", receiveMetrics)
+	http.HandleFunc("/api/v1/apm", receiveAPM)
 
 	if !c.UseTLS { 
 		fmt.Println("Starting " + variables.AppName + " server...")
@@ -88,9 +95,31 @@ func checkTLSKey(keyFile string) bool {
 }
 
 func serveRoot(w http.ResponseWriter, r *http.Request) {
-	io.WriteString(w, "Hello world!")
+	io.WriteString(w, "API V1 Running")
 }
 
-func servePublish(w http.ResponseWriter, r *http.Request) {
-	io.WriteString(w, "Publishing the metrics!")
+func receiveMetrics(w http.ResponseWriter, r *http.Request) {
+	message := models.Message{200,"Metric saved successfully"}
+
+	js, err := json.Marshal(message)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	} else {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(js)
+	}
+}
+func receiveAPM(w http.ResponseWriter, r *http.Request) {
+	m := models.Metric{101010101,"cpu_load","45",time.Now()}
+
+	js, err := json.Marshal(m)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	} else {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(js)
+	}
+
 }
