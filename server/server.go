@@ -10,6 +10,7 @@ import (
 	"time"
 
 	//"github.com/nytimes/gziphandler"
+	"github.com/serainville/gologger"
 
 	"github.com/serainville/inquisitor/variables"
 	"github.com/serainville/inquisitor/models"
@@ -41,24 +42,24 @@ func Init(
 
 }
 
+
 func StartServer(c *Config) bool {
+
+	logger1 := gologger.GetLogger(gologger.BASIC, gologger.ColoredLog)
 
 	http.HandleFunc("/", serveRoot)
 	http.HandleFunc("/api/v1/metrics", receiveMetrics)
 	http.HandleFunc("/api/v1/apm", receiveAPM)
 
-	if !c.UseTLS { 
-		fmt.Println("Starting " + variables.AppName + " server...")
-		fmt.Println("Version: " + variables.Version)
-		fmt.Println("Commit: " + variables.CommitID)
-		fmt.Println("")
-		fmt.Println("WARNING: Server is not secure!")
-		fmt.Println("         TLS should be enabled to encrypt communications.")
-		fmt.Println("         Do not run in production environment!")
-		fmt.Println("")
-		fmt.Printf("Listening on http://%s:%s\n\n", c.ip, c.port)
+	if !c.UseTLS {
+		logger1.Info("Starting server...")
+		logger1.Info("Version: " + variables.Version + " (" + variables.CommitID + ")")
+		logger1.Warn("WARNING: TLS disabled. Server is not secure!")
+		logger1.Warn("WARNING: Do not use in production")
+		logger1.Info("Listening on http://" + c.ip + ":" + c.port)
 		http.ListenAndServe(c.ip + ":" + c.port, nil)
 	} else {
+		logger1.Info("Starting server...")
 		fmt.Println("Starting server...")
 		if checkTLSCert(c.TLSCertFile) && checkTLSKey(c.TLSKeyFile) {
 			fmt.Printf("Listening on https://%s:%s\n\n", c.ip, c.port)
