@@ -2,6 +2,7 @@ package models
 
 import (
 	"time"
+	"errors"
 )
 
 type Alert struct {
