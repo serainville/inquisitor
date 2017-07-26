@@ -8,7 +8,7 @@ import (
 type Alert struct {
 	Name		uint64		`json:"name"`
 	Message		string		`json:"message"`
-	Severity	string		`json:"Severity`
+	Severity	string		`json:"severity"`
 	Timestamp	time.Time	`json:"timestamp"`
 }
 
