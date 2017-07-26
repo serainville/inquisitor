@@ -4,6 +4,7 @@ import (
 	"errors"
 )
 
+// Client describes a server registered to Inquisitor
 type Client struct {
 	AccountID		uint64	`json:"accountid"`
 	Hostname		string	`json:"hostname"`

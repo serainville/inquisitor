@@ -5,6 +5,7 @@ import (
 	"errors"
 )
 
+// Alert describes a generated alert message
 type Alert struct {
 	Name		uint64		`json:"name"`
 	Message		string		`json:"message"`
