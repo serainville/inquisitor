@@ -15,3 +15,7 @@ type Client struct {
 func (m *Client) postClient() error {
 	return errors.New("Not implemeneted")
 }
+
+func (m *Client) getClient() error {
+	return errors.New("Not implemented")
+}

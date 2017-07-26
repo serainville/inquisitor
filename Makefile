@@ -13,6 +13,7 @@ compile:
 deps:
 	go get github.com/spf13/cobra
 	go get github.com/inconshreveable/mousetrap
+	go get github.com/StackExchange/wmi
 
 clean:
 	rm -rf bin/*

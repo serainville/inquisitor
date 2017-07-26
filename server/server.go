@@ -14,7 +14,35 @@ import (
 
 	"github.com/serainville/inquisitor/variables"
 	"github.com/serainville/inquisitor/models"
+	"github.com/serainville/inquisitor/plugins"
 )
+
+var consoleLog = gologger.GetLogger(gologger.BASIC, gologger.ColoredLog)
+
+func StartStandalone() {
+	consoleLog.Info("Starting in Standalone mode")
+	consoleLog.Warn("This feature is not fully implemented")
+	consoleLog.Info("Initilizing agents [cpu, memory, network, storage")
+
+
+	for {
+		consoleLog.Info("Inquiring...")
+
+		go fmt.Println(plugins.GetCPU())
+		go fmt.Println("Mem Total: " + plugins.GetMemoryTotal())
+		go fmt.Println("Mem Free: " + plugins.GetMemoryFree())
+		go fmt.Println("Mem Used: " + plugins.GetMemoryUsed())
+		go fmt.Println("# Process: " + plugins.GetNumberRunningProcess())
+		go fmt.Println(plugins.GetNetwork())
+		go fmt.Println(plugins.GetStorage())
+
+		time.Sleep(30 * time.Second)
+		// running standlone. Ctrl-C to kill
+	}
+	// Implement client agent runs
+	// Implement Monitor storage
+	// Implement APM storage
+}
 
 func StartServer(c *models.ServerConfig) bool {
 
@@ -30,7 +58,7 @@ func StartServer(c *models.ServerConfig) bool {
 		logger1.Warn("WARNING: TLS disabled. Server is not secure!")
 		logger1.Warn("WARNING: Do not use in production")
 		logger1.Info("Listening on http://" + c.IP + ":" + c.Port)
-		http.ListenAndServe(c.IP + ":" + c.Port, nil)
+		log.Fatal(http.ListenAndServe(c.IP + ":" + c.Port, nil))
 	} else {
 		logger1.Info("Starting server...")
 		fmt.Println("Starting server...")
