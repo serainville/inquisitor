@@ -16,34 +16,7 @@ import (
 	"github.com/serainville/inquisitor/models"
 )
 
-type Config struct {
-	ip string
-	port string
-	TLSCertFile string
-	TLSKeyFile string
-	UseTLS bool
-	Database
-}
-type Database struct {
-	host string
-	port string
-	user string
-	password string
-}
-
-func Init(
-	bindIP string,
-	bindPort string,
-	TLSCertFile string,
-	TLSKeyFile string,
-	UseTLS bool) *Config {
-
-	return &Config{ip: bindIP, port: bindPort, TLSCertFile: TLSCertFile, TLSKeyFile: TLSKeyFile, UseTLS: UseTLS}
-
-}
-
-
-func StartServer(c *Config) bool {
+func StartServer(c *models.ServerConfig) bool {
 
 	logger1 := gologger.GetLogger(gologger.BASIC, gologger.ColoredLog)
 
@@ -56,14 +29,14 @@ func StartServer(c *Config) bool {
 		logger1.Info("Version: " + variables.Version + " (" + variables.CommitID + ")")
 		logger1.Warn("WARNING: TLS disabled. Server is not secure!")
 		logger1.Warn("WARNING: Do not use in production")
-		logger1.Info("Listening on http://" + c.ip + ":" + c.port)
-		http.ListenAndServe(c.ip + ":" + c.port, nil)
+		logger1.Info("Listening on http://" + c.IP + ":" + c.Port)
+		http.ListenAndServe(c.IP + ":" + c.Port, nil)
 	} else {
 		logger1.Info("Starting server...")
 		fmt.Println("Starting server...")
 		if checkTLSCert(c.TLSCertFile) && checkTLSKey(c.TLSKeyFile) {
-			fmt.Printf("Listening on https://%s:%s\n\n", c.ip, c.port)
-			log.Fatal(http.ListenAndServeTLS(":" + c.port, c.TLSKeyFile, c.TLSCertFile, nil))
+			fmt.Printf("Listening on https://%s:%s\n\n", c.IP, c.Port)
+			log.Fatal(http.ListenAndServeTLS(c.IP + ":" + c.Port, c.TLSKeyFile, c.TLSCertFile, nil))
 		} else {
 			log.Fatal("Could not start server")
 		}
