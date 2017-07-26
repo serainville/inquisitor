@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"github.com/serainville/inquisitor/constants"
+	"github.com/serainville/inquisitor/variables"
 )
 
 
@@ -16,7 +16,7 @@ var versionCmd = &cobra.Command{
 	Use: "version",
 	Short: "Version number",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(constants.AppName + " " + constants.Version)
+		fmt.Println(variables.AppName + " " + variables.Version)
 	},
 }
 

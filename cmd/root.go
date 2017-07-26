@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/serainville/inquisitor/constants"
+	"github.com/serainville/inquisitor/variables"
 	"github.com/spf13/cobra"
 )
 
@@ -20,7 +20,7 @@ var RootCmd = &cobra.Command{
  ░▒   ▒ ░ ▒░▒░▒░ ░ ▒░▓  ░░ ▒░▓  ░░░ ▒░ ░░ ░▒ ▒  ░  ▒ ░░   ░ ▒░▒░▒░ ░ ▒▓ ░▒▓░
   ░   ░   ░ ▒ ▒░ ░ ░ ▒  ░░ ░ ▒  ░ ░ ░  ░  ░  ▒       ░      ░ ▒ ▒░   ░▒ ░ ▒░
 ░ ░   ░ ░ ░ ░ ▒    ░ ░     ░ ░      ░   ░          ░      ░ ░ ░ ▒    ░░   ░ 
-      ░     ░ ░      ░  ░    ░  ░   ░  ░░ ░  VER ` + constants.Version + `        ░ ░     ░     
+      ░     ░ ░      ░  ░    ░  ░   ░  ░░ ░  VER ` + variables.Version + `        ░ ░     ░     
                                         ░                                                                            
 `,
 
