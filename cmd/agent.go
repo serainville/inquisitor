@@ -10,7 +10,7 @@ var (
 	// Host is the hostname or IP address of server
 	Host string
 	// Port number of server
-	Port Int
+	Port int
 	// Cert is the certificate file name
 	Cert string
 	// TLS sets whether TLS support is Enabled or disable
