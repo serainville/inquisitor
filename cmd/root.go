@@ -8,7 +8,7 @@ import (
 var VersionNum = false
 
 var RootCmd = &cobra.Command{
-	Use: "inquisitor",
+	Use:   "inquisitor",
 	Short: "System metrics collector",
 	Long: `
 
@@ -23,11 +23,8 @@ var RootCmd = &cobra.Command{
       ░     ░ ░      ░  ░    ░  ░   ░  ░░ ░  VER ` + variables.Version + `        ░ ░     ░     
                                         ░                                                                            
 `,
-
 }
-
 
 func init() {
 	RootCmd.PersistentFlags().BoolVarP(&VersionNum, "version", "", false, "")
 }
-

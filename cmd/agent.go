@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"github.com/spf13/cobra"
 	"fmt"
+	"github.com/spf13/cobra"
 	"strconv"
 )
 
@@ -10,7 +10,7 @@ var (
 	Host string
 	Port int
 	Cert string
-	Tls bool
+	Tls  bool
 )
 
 func init() {
@@ -22,7 +22,7 @@ func init() {
 }
 
 var agentCmd = &cobra.Command{
-	Use: "agent",
+	Use:   "agent",
 	Short: "Agent management",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("Connecting to server....")
@@ -30,4 +30,3 @@ var agentCmd = &cobra.Command{
 		fmt.Println(" Port: " + strconv.Itoa(Port))
 	},
 }
-

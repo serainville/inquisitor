@@ -1,20 +1,20 @@
 package server
 
 import (
+	"encoding/json"
 	"fmt"
-	"net/http"
 	"io"
 	"log"
+	"net/http"
 	"os"
-	"encoding/json"
 	"time"
 
 	//"github.com/nytimes/gziphandler"
 	"github.com/serainville/gologger"
 
-	"github.com/serainville/inquisitor/variables"
 	"github.com/serainville/inquisitor/models"
 	"github.com/serainville/inquisitor/plugins"
+	"github.com/serainville/inquisitor/variables"
 )
 
 var consoleLog = gologger.GetLogger(gologger.BASIC, gologger.ColoredLog)
@@ -23,7 +23,6 @@ func StartStandalone() {
 	consoleLog.Info("Starting in Standalone mode")
 	consoleLog.Warn("This feature is not fully implemented")
 	consoleLog.Info("Initilizing agents [cpu, memory, network, storage")
-
 
 	for {
 		consoleLog.Info("Inquiring...")
@@ -58,13 +57,13 @@ func StartServer(c *models.ServerConfig) bool {
 		logger1.Warn("WARNING: TLS disabled. Server is not secure!")
 		logger1.Warn("WARNING: Do not use in production")
 		logger1.Info("Listening on http://" + c.IP + ":" + c.Port)
-		log.Fatal(http.ListenAndServe(c.IP + ":" + c.Port, nil))
+		log.Fatal(http.ListenAndServe(c.IP+":"+c.Port, nil))
 	} else {
 		logger1.Info("Starting server...")
 		fmt.Println("Starting server...")
 		if checkTLSCert(c.TLSCertFile) && checkTLSKey(c.TLSKeyFile) {
 			fmt.Printf("Listening on https://%s:%s\n\n", c.IP, c.Port)
-			log.Fatal(http.ListenAndServeTLS(c.IP + ":" + c.Port, c.TLSKeyFile, c.TLSCertFile, nil))
+			log.Fatal(http.ListenAndServeTLS(c.IP+":"+c.Port, c.TLSKeyFile, c.TLSCertFile, nil))
 		} else {
 			log.Fatal("Could not start server")
 		}
@@ -101,7 +100,7 @@ func serveRoot(w http.ResponseWriter, r *http.Request) {
 }
 
 func receiveMetrics(w http.ResponseWriter, r *http.Request) {
-	message := models.Message{200,"Metric saved successfully"}
+	message := models.Message{200, "Metric saved successfully"}
 
 	js, err := json.Marshal(message)
 	if err != nil {
@@ -113,7 +112,7 @@ func receiveMetrics(w http.ResponseWriter, r *http.Request) {
 	}
 }
 func receiveAPM(w http.ResponseWriter, r *http.Request) {
-	m := models.Metric{101010101,"cpu_load","45",time.Now()}
+	m := models.Metric{101010101, "cpu_load", "45", time.Now()}
 
 	js, err := json.Marshal(m)
 	if err != nil {

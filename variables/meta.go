@@ -1,7 +1,7 @@
 package variables
 
 var (
-	AppName = "Inquisitor"
-	Version	string
+	AppName  = "Inquisitor"
+	Version  string
 	CommitID string
 )

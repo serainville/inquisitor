@@ -6,6 +6,6 @@ import (
 )
 
 func StandaloneServer() error {
-	 fmt.Println("Not emplemented")
-	 return errors.New("Not implemeneted")
+	fmt.Println("Not emplemented")
+	return errors.New("Not implemeneted")
 }
