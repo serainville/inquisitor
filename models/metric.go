@@ -6,19 +6,18 @@ import (
 )
 
 // Metric describes a measurement from a system or application
-
 type Metric struct {
-	Name      string
-	Group	  string
-	Value     string
+	Name  string
+	Group string
+	Value string
 }
 
-
+// ClientMetrics describes a Client's metrics message
 type ClientMetrics struct {
-	ClientID uint64
+	ClientID  uint64
 	Timestamp time.Time
-	Secret string
-	Metrics []*Metric
+	Secret    string
+	Metrics   []*Metric
 }
 
 /*
