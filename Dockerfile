@@ -6,5 +6,5 @@ WORKDIR "/opt"
 
 ADD .docker_build/inquisitor /opt/bin/inquisitor
 
-EXPOSE 80
-CMD ["/opt/bin/inquisitor","server","-b","0.0.0.0","-p","80"]
+EXPOSE 27001
+CMD ["/opt/bin/inquisitor","server","-b","0.0.0.0"]

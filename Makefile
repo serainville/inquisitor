@@ -37,7 +37,7 @@ build:
 	go build -o bin/inquisitor-${VERSION}-amd64 -ldflags $(LDFLAGS)
 
 lint:
-	$GOPATH/bin/golint ./...
+	$(GOPATH)/bin/golint ./...
 
 gofmt:
 	gofmt -s -r .
