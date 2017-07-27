@@ -5,8 +5,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var VersionNum = false
-
+// RootCmd is the CLIs root
 var RootCmd = &cobra.Command{
 	Use:   "inquisitor",
 	Short: "System metrics collector",

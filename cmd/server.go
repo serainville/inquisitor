@@ -8,10 +8,6 @@ import (
 )
 
 var (
-	DBHost            string
-	DBUser            string
-	DBUserHasPassword bool
-
 	config models.ServerConfig
 )
 

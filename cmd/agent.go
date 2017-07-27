@@ -7,10 +7,14 @@ import (
 )
 
 var (
+	// Host is the hostname or IP address of server
 	Host string
-	Port int
+	// Port number of server
+	Port Int
+	// Cert is the certificate file name
 	Cert string
-	Tls  bool
+	// TLS sets whether TLS support is Enabled or disable
+	TLS  bool
 )
 
 func init() {
@@ -18,7 +22,7 @@ func init() {
 	agentCmd.Flags().StringVarP(&Host, "host", "s", "localhost", "Gollector server name or IP")
 	agentCmd.Flags().IntVarP(&Port, "port", "p", 21200, "Gollector server port number")
 	agentCmd.Flags().StringVarP(&Cert, "cert", "", "", "Agent certificate file")
-	agentCmd.Flags().BoolVarP(&Tls, "tls", "", false, "Use TLS")
+	agentCmd.Flags().BoolVarP(&TLS, "tls", "", false, "Use TLS")
 }
 
 var agentCmd = &cobra.Command{

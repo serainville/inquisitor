@@ -5,6 +5,7 @@ import (
 	"strconv"
 )
 
+// GetCPU outputs the system's CPU usage
 func GetCPU() string {
 	vmStat, _ := mem.VirtualMemory()
 	return strconv.FormatUint(vmStat.Total, 10)

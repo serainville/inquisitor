@@ -19,6 +19,7 @@ import (
 
 var consoleLog = gologger.GetLogger(gologger.BASIC, gologger.ColoredLog)
 
+// StartStandalone starts Inquisitors standalone server
 func StartStandalone() {
 	consoleLog.Info("Starting in Standalone mode")
 	consoleLog.Warn("This feature is not fully implemented")
@@ -43,6 +44,7 @@ func StartStandalone() {
 	// Implement APM storage
 }
 
+// StartServer starts the Inquisitor HTTP server
 func StartServer(c *models.ServerConfig) bool {
 
 	logger1 := gologger.GetLogger(gologger.BASIC, gologger.ColoredLog)
