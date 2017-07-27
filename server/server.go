@@ -114,15 +114,38 @@ func receiveMetrics(w http.ResponseWriter, r *http.Request) {
 	}
 }
 func receiveAPM(w http.ResponseWriter, r *http.Request) {
-	m := models.Metric{101010101, "cpu_load", "45", time.Now()}
+	//m := models.Metric{101010101, "cpu_load", "45", time.Now()}
+	m2 := &models.ClientMetrics{
+		ClientID: 1010101,
+		Secret: "a44ecab3784ad4545",
+		Timestamp: time.Now(),
+	}
 
-	js, err := json.Marshal(m)
+	Metrica := []*models.Metric{}
+	//metric := new(models.Metric)
+
+	Metrica = append(Metrica, appendMetric("free", "memory", "300"))
+	Metrica = append(Metrica, appendMetric("used", "memory", "400"))
+	Metrica = append(Metrica, appendMetric("total", "memory", "500"))
+
+	m2.Metrics = Metrica
+
+	js, err := json.Marshal(m2)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	} else {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Token", "fs4sas-fsaffsadf4g-cxgfsdgdsgdsg-gdfsgdsfg")
 		w.Write(js)
 	}
 
+}
+
+func appendMetric(name string, group string, value string) *models.Metric {
+	m := new(models.Metric)
+	m.Name = name
+	m.Group = group
+	m.Value = value
+	return m
 }

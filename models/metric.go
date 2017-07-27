@@ -1,18 +1,28 @@
 package models
 
 import (
-	"errors"
+	//"errors"
 	"time"
 )
 
 // Metric describes a measurement from a system or application
+
 type Metric struct {
-	ClientID  uint64    `json:"clientid"`
-	Name      string    `json:"name"`
-	Value     string    `json:"value"`
-	Timestamp time.Time `json:"timestamp"`
+	Name      string
+	Group	  string
+	Value     string
 }
 
+
+type ClientMetrics struct {
+	ClientID uint64
+	Timestamp time.Time
+	Secret string
+	Metrics []*Metric
+}
+
+/*
 func (m *Metric) postMetric() error {
 	return errors.New("Not implemeneted")
 }
+*/
