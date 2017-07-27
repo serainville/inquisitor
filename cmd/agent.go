@@ -1,9 +1,9 @@
 package cmd
 
 import (
-	"fmt"
 	"github.com/spf13/cobra"
-	"strconv"
+
+	"github.com/serainville/inquisitor/client"
 )
 
 var (
@@ -29,8 +29,6 @@ var agentCmd = &cobra.Command{
 	Use:   "agent",
 	Short: "Agent management",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Connecting to server....")
-		fmt.Println(" Server: " + Host)
-		fmt.Println(" Port: " + strconv.Itoa(Port))
+		client.Start()
 	},
 }
