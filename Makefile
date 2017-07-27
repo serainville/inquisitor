@@ -18,6 +18,10 @@ $(DOCKER_CMD): clean_docker
 	mkdir -p $(DOCKER_BUILD)
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -v -o $(DOCKER_CMD) .
 
+docker: $(DOCKER_CMD)
+	docker build -t serainville/inquisitor:latest .
+	docker build -t serainville/inquisitor:${VERSION} .
+
 heroku: $(DOCKER_CMD)
 	heroku container:push web
 

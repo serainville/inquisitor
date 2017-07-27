@@ -124,9 +124,9 @@ func receiveAPM(w http.ResponseWriter, r *http.Request) {
 	Metrica := []*models.Metric{}
 	//metric := new(models.Metric)
 
-	Metrica = append(Metrica, appendMetric("free", "memory", "300"))
-	Metrica = append(Metrica, appendMetric("used", "memory", "400"))
-	Metrica = append(Metrica, appendMetric("total", "memory", "500"))
+	Metrica = append(Metrica, appendMetric("free", "memory", plugins.GetMemoryTotal()))
+	Metrica = append(Metrica, appendMetric("used", "memory", plugins.GetMemoryFree()))
+	Metrica = append(Metrica, appendMetric("total", "memory", plugins.GetNumberRunningProcess()))
 
 	m2.Metrics = Metrica
 

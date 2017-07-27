@@ -2,3 +2,4 @@ bin
 *.crt
 *.key
 .docker_build
+inquisitor
