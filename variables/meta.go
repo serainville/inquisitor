@@ -2,9 +2,9 @@ package variables
 
 var (
 	// AppName stores the application's name
-	AppName  = "Inquisitor"
+	AppName = "Inquisitor"
 	// Version stores the application's version number
-	Version  string
+	Version string
 	// CommitID stores the build's commit ID
 	CommitID string
 )

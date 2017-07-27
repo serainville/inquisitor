@@ -25,5 +25,5 @@ var RootCmd = &cobra.Command{
 }
 
 func init() {
-	
+
 }

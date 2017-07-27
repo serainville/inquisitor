@@ -14,7 +14,7 @@ var (
 	// Cert is the certificate file name
 	Cert string
 	// TLS sets whether TLS support is Enabled or disable
-	TLS  bool
+	TLS bool
 )
 
 func init() {
