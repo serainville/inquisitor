@@ -23,27 +23,37 @@ func Start() {
 	for {
 		consoleLog.Info("Inquiring...")
 
-		client := &models.ClientMetrics{
-			ClientID:  1010101,
-			Secret:    "a44ecab3784ad4545",
-			Timestamp: time.Now(),
-		}
+		client := collectMetrics()
 
-		Metrica := []*models.Metric{}
-
-		Metrica = append(Metrica, appendMetric("total", "memory", plugins.GetMemoryTotal()))
-		Metrica = append(Metrica, appendMetric("free", "memory", plugins.GetMemoryFree()))
-		Metrica = append(Metrica, appendMetric("used", "memory", plugins.GetMemoryUsed()))
-		Metrica = append(Metrica, appendMetric("total", "memory", plugins.GetNumberRunningProcess()))
-
-		client.Metrics = Metrica
-		// Convert struct to json
-		js, _ := json.Marshal(client)
-
-		fmt.Printf("%s\n", js)
+		sendMetrics(client)
 
 		time.Sleep(5 * time.Second)
 	}
+}
+
+func sendMetrics(client *models.ClientMetrics) (bool, error) {
+	js, _ := json.Marshal(client)
+	fmt.Printf("%s\n", js)
+	return true, nil
+}
+
+func collectMetrics() (m *models.ClientMetrics) {
+	client := &models.ClientMetrics{
+		ClientID:  1010101,
+		Secret:    "a44ecab3784ad4545",
+		Timestamp: time.Now(),
+	}
+
+	Metrica := []*models.Metric{}
+
+	Metrica = append(Metrica, appendMetric("total", "memory", plugins.GetMemoryTotal()))
+	Metrica = append(Metrica, appendMetric("free", "memory", plugins.GetMemoryFree()))
+	Metrica = append(Metrica, appendMetric("used", "memory", plugins.GetMemoryUsed()))
+	Metrica = append(Metrica, appendMetric("total", "memory", plugins.GetNumberRunningProcess()))
+
+	client.Metrics = Metrica
+
+	return client
 }
 
 func appendMetric(name string, group string, value string) *models.Metric {
