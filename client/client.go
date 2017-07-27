@@ -34,19 +34,17 @@ func Start() {
 		Metrica = append(Metrica, appendMetric("total", "memory", plugins.GetMemoryTotal()))
 		Metrica = append(Metrica, appendMetric("free", "memory", plugins.GetMemoryFree()))
 		Metrica = append(Metrica, appendMetric("used", "memory", plugins.GetMemoryUsed()))
-		Metrica = append(Metrica, appendMetric("total", "memory", plugins.GetNumberRunningProcess()))		
+		Metrica = append(Metrica, appendMetric("total", "memory", plugins.GetNumberRunningProcess()))
 
 		client.Metrics = Metrica
 		// Convert struct to json
 		js, _ := json.Marshal(client)
-	
+
 		fmt.Printf("%s\n", js)
 
 		time.Sleep(5 * time.Second)
 	}
 }
-
-
 
 func appendMetric(name string, group string, value string) *models.Metric {
 	m := new(models.Metric)

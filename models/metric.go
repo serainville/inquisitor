@@ -14,9 +14,9 @@ type Metric struct {
 
 // ClientMetrics describes a Client's metrics message
 type ClientMetrics struct {
-	ClientID  uint64 `json:"clientid"`
+	ClientID  uint64    `json:"clientid"`
 	Timestamp time.Time `json:"timestamp"`
-	Secret    string `json:"secret"`
+	Secret    string    `json:"secret"`
 	Metrics   []*Metric `json:"metrics"`
 }
 

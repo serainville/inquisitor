@@ -1,15 +1,15 @@
 package gologger
 
 import (
+	"github.com/serainville/gologger/logger"
+	"github.com/serainville/gologger/printer"
+	"path"
 	"runtime"
 	"strings"
-	"github.com/serainville/gologger/printer"
-	"github.com/serainville/gologger/logger"
 	"time"
-	"path"
 )
 
-func logPrinter( log logger.LogInstance ) {
+func logPrinter(log logger.LogInstance) {
 	info := retrieveCallInfo()
 	timer := time.Now()
 	logPrint(log, info, timer)
@@ -19,11 +19,11 @@ func logPrint(log logger.LogInstance, info *callerInfo, time time.Time) {
 	printer.Print(log, info.packageName, info.fileName, info.line, info.funcName, time)
 }
 
-type callerInfo struct  {
+type callerInfo struct {
 	packageName string
-	fileName string
-	funcName string
-	line int
+	fileName    string
+	funcName    string
+	line        int
 }
 
 func retrieveCallInfo() *callerInfo {

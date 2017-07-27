@@ -1,15 +1,16 @@
 package file
+
 import (
-	"github.com/serainville/gologger/logger"
-	"time"
-	"os"
 	"fmt"
+	"github.com/serainville/gologger/logger"
+	"os"
 	"path"
+	"time"
 )
 
 func FilePrinter(log logger.LogInstance, packageName string, fileName string, lineNumber int, funcName string, time time.Time) {
 	logFileName := log.LoggerInit.Location
-	if(logFileName == "") {
+	if logFileName == "" {
 		logFileName = "log.txt"
 	}
 	basePath := path.Dir(logFileName)
@@ -22,12 +23,12 @@ func FilePrinter(log logger.LogInstance, packageName string, fileName string, li
 	logFileName = path.Join(basePath, filePath)
 	file, err := os.OpenFile(logFileName, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0777)
 	defer file.Close()
-	if(err != nil) {
+	if err != nil {
 		panic(err)
 	}
 	logString := fmt.Sprintf("[%s] [%s] [%s::%s::%s] [%d] %s\n", log.LogType, time.Format("2006-01-02 15:04:05"), packageName, fileName, funcName, lineNumber, log.Message)
 	_, fileWriteErr := file.WriteString(logString)
-	if(fileWriteErr != nil) {
+	if fileWriteErr != nil {
 		panic(fileWriteErr)
 	}
 }
