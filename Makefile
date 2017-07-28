@@ -41,7 +41,7 @@ build:
 	go build -o bin/inquisitor-${VERSION}-amd64 -ldflags $(LDFLAGS)
 
 lint:
-	$(GOPATH)/bin/golint ./...
+	$(GOPATH)/bin/golint ./... 
 
 gofmt:
 	gofmt -s -w .
@@ -70,7 +70,8 @@ build-linux:
 	GOOS=linux GOARCH=arm go build -o bin/linux/inquisitor-${VERSION}-arm -ldflags $(LDFLAGS)
 	GOOS=linux GOARCH=arm64 go build -o bin/linux/inquisitor-${VERSION}-arm64 -ldflags $(LDFLAGS)
 
-
+build-linux=amd64:
+	GOOS=linux GOARCH=amd64 go build -o bin/linux/inquisitor-${VERSION}-amd64 -ldflags $(LDFLAGS)
 
 
 

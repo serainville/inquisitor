@@ -7,7 +7,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 	"time"
 
 	//"github.com/nytimes/gziphandler"
@@ -76,29 +75,7 @@ func StartServer(c *models.ServerConfig) bool {
 	return true
 }
 
-func checkTLSCert(certFile string) bool {
-	if len(certFile) > 0 {
-		if _, err := os.Stat(certFile); !os.IsNotExist(err) {
-			return true
-		}
-		log.Fatal("Certificate file not found - " + certFile)
-		return false
-	}
-	log.Fatal("A certificate file must be specified!")
-	return false
-}
 
-func checkTLSKey(keyFile string) bool {
-	if len(keyFile) > 0 {
-		if _, err := os.Stat(keyFile); !os.IsNotExist(err) {
-			return true
-		}
-		log.Fatal("Certificate key file not found - " + keyFile)
-		return false
-	}
-	log.Fatal("A certificate key file must be specified!")
-	return false
-}
 
 func serveRoot(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, "API V1 Running")
@@ -110,9 +87,8 @@ func receiveMetrics(w http.ResponseWriter, r *http.Request) {
 	data, err := ioutil.ReadAll(r.Body)
 	consoleLog.Info(string(data))
 
-	//decoder := json.NewDecoder(r.Body)
 	var t models.ClientMetrics
-	//decoder.Decode(&t)
+
 	json.Unmarshal(data, &t)
 	if err != nil {
 		panic(err)

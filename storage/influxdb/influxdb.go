@@ -47,19 +47,22 @@ func WriteMetrics(data models.ClientMetrics) {
 	}
 
 	// Make client
-	c, err := client.NewHTTPClient(client.HTTPConfig{
+	c, dberr := client.NewHTTPClient(client.HTTPConfig{
 		Addr: "http://192.168.1.214:8086",
 	})
-	if err != nil {
-		fmt.Println("Error creating InfluxDB Client: ", err.Error())
+	if dberr != nil {
+		fmt.Println("Error creating InfluxDB Client: ", dberr.Error())
 	}
 	defer c.Close()
 
 	// Create a new point batch
-	bp, _ := client.NewBatchPoints(client.BatchPointsConfig{
+	bp, err := client.NewBatchPoints(client.BatchPointsConfig{
 		Database:  "inquisitor",
 		Precision: "s",
 	})
+	if err != nil {
+		fmt.Println("Could not create point batch")
+	}
 
 	pt, err := client.NewPoint("server01", tags, fields, time.Now())
 	if err != nil {
@@ -68,6 +71,9 @@ func WriteMetrics(data models.ClientMetrics) {
 	bp.AddPoint(pt)
 
 	// Write the batch
-	c.Write(bp)
+	err = c.Write(bp)
+	if err != nil {
+		fmt.Println("Error: Could not write!", err.Error())
+	}
 }
 
