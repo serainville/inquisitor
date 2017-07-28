@@ -9,7 +9,7 @@ DOCKER_CMD=$(DOCKER_BUILD)/inquisitor
 
 default: clean deps compile
 
-all: clean deps lint gofmt gotest build-linux-amd64 build-darwin-amd64 build-freebsd-amd64 build-windows-amd64
+all: clean deps lint gofmt gotest build-darwin build-freebsd build-windows build-netbsd build-linux
 
 compile:
 	go build -o bin/inquisitor-${VERSION}-amd64 -ldflags "-X inquisitor/variables.Version=${VERSION}"
@@ -44,19 +44,34 @@ lint:
 	$(GOPATH)/bin/golint ./...
 
 gofmt:
-	gofmt -s -r .
+	gofmt -s -w .
 
 gotest:
 	go test
 
-build-linux-amd64:
-	GOOS=linux GOARCH=amd64 go build -v -o bin/linux_amd64/inquisitor-${VERSION}-amd64 -ldflags $(LDFLAGS)
+build-darwin:
+	GOOS=darwin GOARCH=amd64 go build -o bin/darwin/inquisitor-${VERSION}-amd64 -ldflags $(LDFLAGS)
 
-build-darwin-amd64:
-	GOOS=darwin GOARCH=amd64 go build -v -o bin/darwin_amd64/inquisitor-${VERSION}-amd64 -ldflags $(LDFLAGS)
+build-freebsd:
+	GOOS=freebsd GOARCH=amd64 go build -o bin/freebsd/inquisitor-${VERSION}-amd64 -ldflags $(LDFLAGS)
 
-build-freebsd-amd64:
-	GOOS=freebsd GOARCH=amd64 go build -v -o bin/freebsd_amd64/inquisitor-${VERSION}-amd64 -ldflags $(LDFLAGS)
+build-windows:
+	GOOS=windows GOARCH=amd64 go build -o bin/windows/inquisitor-${VERSION}-amd64.exe -ldflags $(LDFLAGS)
+	GOOS=windows GOARCH=386 go build -o bin/windows/inquisitor-${VERSION}-386.exe -ldflags $(LDFLAGS)
 
-build-windows-amd64:
-	GOOS=windows GOARCH=amd64 go build -v -o bin/windows_amd64/inquisitor-${VERSION}-amd64 -ldflags $(LDFLAGS)
+build-netbsd:
+	GOOS=netbsd GOARCH=386 go build -o bin/netbsd/inquisitor-${VERSION}-386 -ldflags $(LDFLAGS)
+	GOOS=netbsd GOARCH=amd64 go build -o bin/netbsd/inquisitor-${VERSION}-amd64 -ldflags $(LDFLAGS)
+	GOOS=netbsd GOARCH=arm go build -o bin/netbsd/inquisitor-${VERSION}-arm -ldflags $(LDFLAGS)
+
+build-linux:
+	GOOS=linux GOARCH=386 go build -o bin/linux/inquisitor-${VERSION}-386 -ldflags $(LDFLAGS)
+	GOOS=linux GOARCH=amd64 go build -o bin/linux/inquisitor-${VERSION}-amd64 -ldflags $(LDFLAGS)
+	GOOS=linux GOARCH=arm go build -o bin/linux/inquisitor-${VERSION}-arm -ldflags $(LDFLAGS)
+	GOOS=linux GOARCH=arm64 go build -o bin/linux/inquisitor-${VERSION}-arm64 -ldflags $(LDFLAGS)
+
+
+
+
+
+

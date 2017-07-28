@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"time"
+	"io/ioutil"
 
 	//"github.com/nytimes/gziphandler"
 	"github.com/serainville/gologger"
@@ -101,9 +102,14 @@ func serveRoot(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, "API V1 Running")
 }
 
+
 func receiveMetrics(w http.ResponseWriter, r *http.Request) {
 	message := models.Message{200, "Metric saved successfully"}
 
+	data, err := ioutil.ReadAll(r.Body)
+	consoleLog.Info(string(data))
+
+	
 	js, err := json.Marshal(message)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -113,6 +119,8 @@ func receiveMetrics(w http.ResponseWriter, r *http.Request) {
 		w.Write(js)
 	}
 }
+
+
 func receiveAPM(w http.ResponseWriter, r *http.Request) {
 	//m := models.Metric{101010101, "cpu_load", "45", time.Now()}
 	m2 := &models.ClientMetrics{
