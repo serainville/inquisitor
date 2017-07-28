@@ -53,7 +53,6 @@ func sendMetrics(client *models.ClientMetrics, host, port string) (bool, error) 
 		defer resp.Body.Close()
 	}
 
-	
 	return true, nil
 }
 
@@ -69,7 +68,7 @@ func collectMetrics() (m *models.ClientMetrics) {
 	Metrica = append(Metrica, appendMetric("total", "memory", plugins.GetMemoryTotal()))
 	Metrica = append(Metrica, appendMetric("free", "memory", plugins.GetMemoryFree()))
 	Metrica = append(Metrica, appendMetric("used", "memory", plugins.GetMemoryUsed()))
-	Metrica = append(Metrica, appendMetric("total", "memory", plugins.GetNumberRunningProcess()))
+	//Metrica = append(Metrica, appendMetric("total", "memory", plugins.GetNumberRunningProcess()))
 
 	client.Metrics = Metrica
 

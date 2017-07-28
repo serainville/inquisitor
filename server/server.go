@@ -4,17 +4,18 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"time"
-	"io/ioutil"
 
 	//"github.com/nytimes/gziphandler"
 	"github.com/serainville/gologger"
 
 	"github.com/serainville/inquisitor/models"
 	"github.com/serainville/inquisitor/plugins"
+	"github.com/serainville/inquisitor/storage/influxdb"
 	"github.com/serainville/inquisitor/variables"
 )
 
@@ -60,6 +61,7 @@ func StartServer(c *models.ServerConfig) bool {
 		logger1.Warn("WARNING: TLS disabled. Server is not secure!")
 		logger1.Warn("WARNING: Do not use in production")
 		logger1.Info("Listening on http://" + c.IP + ":" + c.Port)
+
 		log.Fatal(http.ListenAndServe(c.IP+":"+c.Port, nil))
 	} else {
 		logger1.Info("Starting server...")
@@ -102,14 +104,23 @@ func serveRoot(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, "API V1 Running")
 }
 
-
 func receiveMetrics(w http.ResponseWriter, r *http.Request) {
 	message := models.Message{200, "Metric saved successfully"}
 
 	data, err := ioutil.ReadAll(r.Body)
 	consoleLog.Info(string(data))
 
-	
+	//decoder := json.NewDecoder(r.Body)
+	var t models.ClientMetrics
+	//decoder.Decode(&t)
+	json.Unmarshal(data, &t)
+	if err != nil {
+		panic(err)
+	}
+
+	influxdb.WriteCPU(t)
+	influxdb.WriteMemory(t)
+
 	js, err := json.Marshal(message)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -119,7 +130,6 @@ func receiveMetrics(w http.ResponseWriter, r *http.Request) {
 		w.Write(js)
 	}
 }
-
 
 func receiveAPM(w http.ResponseWriter, r *http.Request) {
 	//m := models.Metric{101010101, "cpu_load", "45", time.Now()}
