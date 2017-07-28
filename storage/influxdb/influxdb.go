@@ -30,22 +30,32 @@ func Client(data *models.ClientMetrics) {
 
 }
 
-// Write a point using the HTTP client
+// WriteMetrics Write a point using the HTTP client
 func WriteMetrics(data models.ClientMetrics) error {
 
-	fmt.Println(data.ClientID, data.Timestamp, data.Secret, data.Metrics)
+	fmt.Println(data.ClientID, data.Timestamp)
 
 	// Create a point and add to batch
 	tags := map[string]string{"clientid": string(data.ClientID)}
 
-	fields := map[string]interface{}{}
-	for _, elem := range data.Metrics {
+	for _, mGroup := range data.Groups {
 		//fmt.Println(elem.Name, elem.Group, elem.Value)
-
-		intValue, _ := strconv.Atoi(elem.Value)
-		fields[elem.Group+"_"+elem.Name] = intValue
+		fmt.Println("- ",mGroup.Name)
+		fields := map[string]interface{}{}
+		for _, mMetric := range mGroup.Metrics {
+			fmt.Println("\t - ", mMetric.Name, mMetric.Value)
+			intValue, _ := strconv.Atoi(mMetric.Value)
+			fields[mMetric.Name] = intValue
+		} 
+		//intValue, _ := strconv.Atoi(elem.Value)
+		//fields[elem.Group+"_"+elem.Name] = intValue
+		err := storeMetrics(mGroup.Name, tags, fields)
+		return err
 	}
+	return nil
+}
 
+func storeMetrics(pointName string, tags map[string]string, fields map[string]interface{}) error {
 	// Make client
 	c, dberr := client.NewHTTPClient(client.HTTPConfig{
 		Addr: "http://192.168.1.214:8086",
@@ -64,7 +74,7 @@ func WriteMetrics(data models.ClientMetrics) error {
 		fmt.Println("Could not create point batch")
 	}
 
-	pt, err := client.NewPoint("systems", tags, fields, time.Now())
+	pt, err := client.NewPoint(pointName, tags, fields, time.Now())
 	if err != nil {
 		fmt.Println("Error: ", err.Error())
 	}
@@ -75,7 +85,6 @@ func WriteMetrics(data models.ClientMetrics) error {
 	if err != nil {
 		fmt.Println("Error: Could not write!", err.Error())
 	}
-
 	return err
 }
 

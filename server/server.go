@@ -111,31 +111,6 @@ func receiveMetrics(w http.ResponseWriter, r *http.Request) {
 }
 
 func receiveAPM(w http.ResponseWriter, r *http.Request) {
-	//m := models.Metric{101010101, "cpu_load", "45", time.Now()}
-	m2 := &models.ClientMetrics{
-		ClientID:  1010101,
-		Secret:    "a44ecab3784ad4545",
-		Timestamp: time.Now(),
-	}
-
-	Metrica := []*models.Metric{}
-	//metric := new(models.Metric)
-
-	Metrica = append(Metrica, appendMetric("free", "memory", plugins.GetMemoryTotal()))
-	Metrica = append(Metrica, appendMetric("used", "memory", plugins.GetMemoryFree()))
-	Metrica = append(Metrica, appendMetric("total", "memory", plugins.GetNumberRunningProcess()))
-
-	m2.Metrics = Metrica
-
-	js, err := json.Marshal(m2)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	} else {
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Content-Type", "application/json")
-		w.Header().Set("Token", "fs4sas-fsaffsadf4g-cxgfsdgdsgdsg-gdfsgdsfg")
-		w.Write(js)
-	}
 
 }
 

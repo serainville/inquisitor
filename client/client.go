@@ -39,6 +39,9 @@ func sendMetrics(client *models.ClientMetrics, host, port string) {
 	url := "http://" + host + ":" + port + "/api/v1/metrics"
 	consoleLog.Info("Publishing to: " + url)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(js))
+	if err != nil {
+
+	}
 	req.Header.Set("Content-Type", "application/json")
 
 	httpClient := &http.Client{}
@@ -61,16 +64,27 @@ func collectMetrics() (m *models.ClientMetrics) {
 		Timestamp: time.Now(),
 	}
 
-	Metrica := []*models.Metric{}
 
-	Metrica = append(Metrica, appendMetric("total", "memory", plugins.GetMemoryTotal()))
-	Metrica = append(Metrica, appendMetric("free", "memory", plugins.GetMemoryFree()))
-	Metrica = append(Metrica, appendMetric("used", "memory", plugins.GetMemoryUsed()))
+
+	MemoryMetrics := []*models.Metric{}
+	MemoryMetrics = append(MemoryMetrics, appendMetric("total", "memory", plugins.GetMemoryTotal()))
+	MemoryMetrics = append(MemoryMetrics, appendMetric("free", "memory", plugins.GetMemoryFree()))
+	MemoryMetrics = append(MemoryMetrics, appendMetric("used", "memory", plugins.GetMemoryUsed()))
 	//Metrica = append(Metrica, appendMetric("total", "memory", plugins.GetNumberRunningProcess()))
 
-	client.Metrics = Metrica
+	groups := []*models.MetricGroup{}
+	groups = append(groups, appendMetricGroup("memory", MemoryMetrics))
+
+	client.Groups = groups
 
 	return client
+}
+
+func appendMetricGroup(name string, metrics []*models.Metric) *models.MetricGroup {
+	g := new(models.MetricGroup)
+	g.Name = name
+	g.Metrics = metrics
+	return g
 }
 
 func appendMetric(name string, group string, value string) *models.Metric {
