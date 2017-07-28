@@ -118,8 +118,7 @@ func receiveMetrics(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	influxdb.WriteCPU(t)
-	influxdb.WriteMemory(t)
+	influxdb.WriteMetrics(t)
 
 	js, err := json.Marshal(message)
 	if err != nil {
