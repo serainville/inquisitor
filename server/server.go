@@ -94,7 +94,11 @@ func receiveMetrics(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	influxdb.WriteMetrics(t)
+	err = influxdb.WriteMetrics(t)
+	if err != nil {
+		consoleLog.Error("Metrics write failed.")
+		http.Error(w, err.Error(), http.StatusServiceUnavailable)
+	}
 
 	js, err := json.Marshal(message)
 	if err != nil {

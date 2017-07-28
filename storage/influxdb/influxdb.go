@@ -31,12 +31,12 @@ func Client(data *models.ClientMetrics) {
 }
 
 // Write a point using the HTTP client
-func WriteMetrics(data models.ClientMetrics) {
+func WriteMetrics(data models.ClientMetrics) error {
 
 	fmt.Println(data.ClientID, data.Timestamp, data.Secret, data.Metrics)
 
 	// Create a point and add to batch
-	tags := map[string]string{"client": "server01", "clientid": "1010101"}
+	tags := map[string]string{"clientid": string(data.ClientID)}
 
 	fields := map[string]interface{}{}
 	for _, elem := range data.Metrics {
@@ -64,7 +64,7 @@ func WriteMetrics(data models.ClientMetrics) {
 		fmt.Println("Could not create point batch")
 	}
 
-	pt, err := client.NewPoint("server01", tags, fields, time.Now())
+	pt, err := client.NewPoint("systems", tags, fields, time.Now())
 	if err != nil {
 		fmt.Println("Error: ", err.Error())
 	}
@@ -75,5 +75,7 @@ func WriteMetrics(data models.ClientMetrics) {
 	if err != nil {
 		fmt.Println("Error: Could not write!", err.Error())
 	}
+
+	return err
 }
 

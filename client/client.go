@@ -34,7 +34,7 @@ func Start(host, port string) {
 	}
 }
 
-func sendMetrics(client *models.ClientMetrics, host, port string) (bool, error) {
+func sendMetrics(client *models.ClientMetrics, host, port string) {
 	js, _ := json.Marshal(client)
 	url := "http://" + host + ":" + port + "/api/v1/metrics"
 	consoleLog.Info("Publishing to: " + url)
@@ -52,8 +52,6 @@ func sendMetrics(client *models.ClientMetrics, host, port string) (bool, error) 
 		//fmt.Printf("%s\n%s\n", resp.Status)
 		defer resp.Body.Close()
 	}
-
-	return true, nil
 }
 
 func collectMetrics() (m *models.ClientMetrics) {
