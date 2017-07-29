@@ -7,7 +7,7 @@ import (
 
 // MetricGroup describes a group of metrics. Used to group together related metrics.
 type MetricGroup struct {
-	Name string `json:"name"`
+	Name    string    `json:"name"`
 	Metrics []*Metric `json:"metrics"`
 }
 
@@ -20,14 +20,16 @@ type Metric struct {
 
 // ClientMetrics describes a Client's metrics message
 type ClientMetrics struct {
-	ClientID  uint64    `json:"clientid"`
-	Timestamp time.Time `json:"timestamp"`
-	Secret    string    `json:"secret"`
-	Groups	  []*MetricGroup `'json:"groups"`
-	//Metrics   []*Metric `json:"metrics"`
+	AccountID string         `json:"accountid"`
+	HostID    string         `json:"hostid"`
+	Hostname  string         `json:"hostname"`
+	Timestamp time.Time      `json:"timestamp"`
+	Secret    string         `json:"secret"`
+	Groups    []*MetricGroup `'json:"groups"`
+	OS        string         `'json:"os"`
+	Platform  string         `'json:"platform"`
+	Kernel    string         `'json:"kernel"`
 }
-
-
 
 /*
 func (m *Metric) postMetric() error {

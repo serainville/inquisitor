@@ -29,7 +29,6 @@ func StartStandalone() {
 	for {
 		consoleLog.Info("Inquiring...")
 
-		go fmt.Println(plugins.GetCPU())
 		go fmt.Println("Mem Total: " + plugins.GetMemoryTotal())
 		go fmt.Println("Mem Free: " + plugins.GetMemoryFree())
 		go fmt.Println("Mem Used: " + plugins.GetMemoryUsed())
@@ -74,8 +73,6 @@ func StartServer(c *models.ServerConfig) bool {
 	}
 	return true
 }
-
-
 
 func serveRoot(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, "API V1 Running")

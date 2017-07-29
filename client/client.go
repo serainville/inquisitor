@@ -11,6 +11,7 @@ import (
 	"github.com/serainville/gologger"
 	"github.com/serainville/inquisitor/models"
 	"github.com/serainville/inquisitor/plugins"
+	"github.com/shirou/gopsutil/host"
 )
 
 var consoleLog = gologger.GetLogger(gologger.BASIC, gologger.ColoredLog)
@@ -49,31 +50,46 @@ func sendMetrics(client *models.ClientMetrics, host, port string) {
 	if err != nil {
 		consoleLog.Error("Could not communicate with server.")
 	} else {
-		// fmt.Printf("%s\n", js)
-		//htmlData, _ := ioutil.ReadAll(resp.Body)
+
 		consoleLog.Info(resp.Status)
-		//fmt.Printf("%s\n%s\n", resp.Status)
 		defer resp.Body.Close()
 	}
 }
 
 func collectMetrics() (m *models.ClientMetrics) {
+
+	hostStat, _ := host.Info()
+	hostname := hostStat.Hostname
+
 	client := &models.ClientMetrics{
-		ClientID:  1010101,
+		AccountID: "6ba7b810-9dad-11d1-80b4-00c04fd430c8",
+		HostID:    hostStat.HostID,
+		OS:        hostStat.OS,
+		Platform:  hostStat.Platform,
+		Kernel:    hostStat.KernelVersion,
+		Hostname:  hostname,
 		Secret:    "a44ecab3784ad4545",
 		Timestamp: time.Now(),
 	}
-
-
 
 	MemoryMetrics := []*models.Metric{}
 	MemoryMetrics = append(MemoryMetrics, appendMetric("total", "memory", plugins.GetMemoryTotal()))
 	MemoryMetrics = append(MemoryMetrics, appendMetric("free", "memory", plugins.GetMemoryFree()))
 	MemoryMetrics = append(MemoryMetrics, appendMetric("used", "memory", plugins.GetMemoryUsed()))
+	MemoryMetrics = append(MemoryMetrics, appendMetric("available", "memory", plugins.GetMemoryAvailable()))
+	MemoryMetrics = append(MemoryMetrics, appendMetric("percent", "memory", plugins.GetMemoryUsedPercent()))
 	//Metrica = append(Metrica, appendMetric("total", "memory", plugins.GetNumberRunningProcess()))
+
+	cpuMetrics := []*models.Metric{}
+	cpuMetrics = append(cpuMetrics, appendMetric("percent", "cpu", plugins.GetCPUIdle()))
+
+	hostMetrics := []*models.Metric{}
+	hostMetrics = append(hostMetrics, appendMetric("uptime", "host", plugins.GetUptime()))
 
 	groups := []*models.MetricGroup{}
 	groups = append(groups, appendMetricGroup("memory", MemoryMetrics))
+	groups = append(groups, appendMetricGroup("cpu", cpuMetrics))
+	groups = append(groups, appendMetricGroup("host", hostMetrics))
 
 	client.Groups = groups
 

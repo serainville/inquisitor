@@ -33,24 +33,20 @@ func Client(data *models.ClientMetrics) {
 // WriteMetrics Write a point using the HTTP client
 func WriteMetrics(data models.ClientMetrics) error {
 
-	fmt.Println(data.ClientID, data.Timestamp)
-
 	// Create a point and add to batch
-	tags := map[string]string{"clientid": string(data.ClientID)}
+	tags := map[string]string{"accountid": data.AccountID, "hostname": data.Hostname}
 
 	for _, mGroup := range data.Groups {
-		//fmt.Println(elem.Name, elem.Group, elem.Value)
-		fmt.Println("- ",mGroup.Name)
 		fields := map[string]interface{}{}
 		for _, mMetric := range mGroup.Metrics {
-			fmt.Println("\t - ", mMetric.Name, mMetric.Value)
 			intValue, _ := strconv.Atoi(mMetric.Value)
 			fields[mMetric.Name] = intValue
-		} 
-		//intValue, _ := strconv.Atoi(elem.Value)
-		//fields[elem.Group+"_"+elem.Name] = intValue
+		}
+
 		err := storeMetrics(mGroup.Name, tags, fields)
-		return err
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -87,4 +83,3 @@ func storeMetrics(pointName string, tags map[string]string, fields map[string]in
 	}
 	return err
 }
-

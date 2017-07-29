@@ -22,3 +22,13 @@ func GetMemoryUsed() string {
 	vmStat, _ := mem.VirtualMemory()
 	return strconv.FormatUint(vmStat.Used, 10)
 }
+
+func GetMemoryAvailable() string {
+	vmStat, _ := mem.VirtualMemory()
+	return strconv.FormatUint(vmStat.Available, 10)
+}
+
+func GetMemoryUsedPercent() string {
+	vmStat, _ := mem.VirtualMemory()
+	return strconv.FormatInt(int64(vmStat.UsedPercent), 10)
+}
