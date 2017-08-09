@@ -16,23 +16,102 @@ import (
 
 var consoleLog = gologger.GetLogger(gologger.BASIC, gologger.ColoredLog)
 
-// Start starts the client service
-func Start(host, port string) {
+type Client struct {
+	Hostname string
+	IP       string
+	OS       string
+	Platform string
+	Kernel   string
+	CPUCores uint16
+	RAM      uint64
+}
 
-	consoleLog.Info("Starting Inquisitor client")
-	consoleLog.Warn("This feature is not fully implemented")
-	consoleLog.Info("Connecting to server " + host + ":" + port + "....")
-	consoleLog.Info("Initilizing agents [cpu, memory, network, storage]")
+func (c Client) register() error {
+	// Store client info in database
+	return nil
+}
+
+func (c Client) getClientInfo() error {
+	hostStat, _ := host.Info()
+
+	c.Hostname = hostStat.Hostname
+	c.IP = "192.168.1.1"
+	c.OS = hostStat.OS
+	c.Platform = hostStat.Platform
+	c.Kernel = ""
+	c.CPUCores = 1
+	c.RAM = 32000000
+
+	return nil
+}
+
+func (c Client) unregister() error {
+	return nil
+}
+
+func (c Client) collect(host string, port string, pl plugins.Plugins) error {
 
 	for {
-		consoleLog.Info("Gathing metrics...")
-
 		client := collectMetrics()
-
 		sendMetrics(client, host, port)
-
 		time.Sleep(5 * time.Second)
 	}
+	return nil
+}
+
+func (c Client) init() (plugins.Plugins) {
+
+	c.getClientInfo()
+	c.checkRegistration()
+	pl := c.loadPlugins()
+	
+	
+
+
+	return pl
+}
+
+func (c Client) loadPlugins() plugins.Plugins {
+	pl := plugins.Plugins{}
+	pl.Discover()
+	pl.List()
+	return pl
+}
+
+func (c Client) isRegistered() (bool, error) {
+	return true, nil
+}
+
+func (c Client) checkRegistration() error {
+	consoleLog.Info("Registering server....")
+	isRegistered, err := c.isRegistered()
+	if err != nil {
+		return err
+	}
+
+	if isRegistered != true {
+		err := c.register()
+		if err != nil {
+			return err
+		}
+	}
+	consoleLog.Info("Server already registered")
+	return nil
+}
+
+
+// Start starts the client service
+func Start(host, port string) {
+	consoleLog.Info("Starting Inquisitor client")
+
+	c	:= new(Client)
+
+	//consoleLog.Info("Connecting to server " + host + ":" + port + "....")
+
+	pl := c.init()
+
+	c.collect(host, port, pl)
+
 }
 
 func sendMetrics(client *models.ClientMetrics, host, port string) {
